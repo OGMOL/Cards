@@ -1,9 +1,11 @@
+import java.math.BigDecimal;
+
 public class DebitCard extends Card {
 
     public DebitCard() {
     }
 
-    public DebitCard(String cardHolderName, int accountBalance) {
+    public DebitCard(String cardHolderName, BigDecimal accountBalance) {
         super(cardHolderName, accountBalance);
     }
 
@@ -12,11 +14,19 @@ public class DebitCard extends Card {
     }
 
     @Override
-    public void withdrawBalance(int withdraw) {
-        if (getAccountBalance() - withdraw < 0) {
-            System.out.println("Insufficient funds");
+    public BigDecimal withdrawBalance(BigDecimal withdraw) throws InsufficientFundsException {
+        if (accountBalance.compareTo(withdraw) >= 0) {
+            return accountBalance.subtract(withdraw);
         } else {
-            setAccountBalance(getAccountBalance() - withdraw);
+            throw new InsufficientFundsException("У вас не достаточно средств");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "DebitCard{" +
+                "cardHolderName='" + cardHolderName + '\'' +
+                ", accountBalance=" + accountBalance +
+                '}';
     }
 }

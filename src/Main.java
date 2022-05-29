@@ -1,25 +1,29 @@
+import java.math.BigDecimal;
+
 public class Main {
-    public static void main(String[] args) {
-        Card card = new Card("Vasia",777);
-        card.balance();
-        card.addBalance(333);
-        card.balance();
-        card.withdrawBalance(110);
-        card.balance();
-        card.dollarBalance(2.5);
-        CreditCard card1 = new CreditCard("Alex");
-        card1.balance();
-        card1.withdrawBalance(333);
-        card1.balance();
-        DebitCard card2 = new DebitCard("Vika",200);
-        card2.withdrawBalance(201);
-        card2.balance();
-        card2.withdrawBalance(200);
-        card2.balance();
-        ATM atm = new ATM();
-        atm.deposit(card2,50);
-        card2.balance();
-        atm.withdraw(card2,60);
-        card2.balance();
+    public static void main(String[] args) throws InsufficientFundsException {
+        CreditCard card1 = new CreditCard("Vasia", new BigDecimal(6));
+        System.out.println(card1.getAccountBalance());
+        card1.setAccountBalance(new BigDecimal("2222"));
+        System.out.println(card1.getAccountBalance());
+        card1.setAccountBalance(card1.addBalance(new BigDecimal("222")));
+        System.out.println(card1.getAccountBalance());
+        card1.setAccountBalance(card1.withdrawBalance(new BigDecimal("3444")));
+        System.out.println(card1.getAccountBalance());
+
+        DebitCard card2 = new DebitCard("Anna");
+        System.out.println(card2.getAccountBalance());
+        card2.setAccountBalance(card2.addBalance(new BigDecimal("500")));
+        System.out.println(card2.getAccountBalance());
+        System.out.println(card2.cardHolderName);
+        card2.setAccountBalance(card2.withdrawBalance(new BigDecimal("50")));
+        System.out.println(card2.getAccountBalance());
+        System.out.println(card2.convertBalance(new BigDecimal("2.6")));
+
+        Atm atm = new Atm(card2);
+        card2.setAccountBalance(atm.withdrawBalance(new BigDecimal(450)));
+        System.out.println(card2.getAccountBalance());
+
     }
 }
+

@@ -1,17 +1,20 @@
-public class Card {
-    private String cardHolderName;
-    private int accountBalance;
+import java.math.BigDecimal;
+import java.util.Objects;
+
+public abstract class Card {
+    protected String cardHolderName;
+    protected BigDecimal accountBalance;
 
     public Card() {
-
     }
 
-    public Card(String cardHolderName, int accountBalance) {
+    public Card(String cardHolderName, BigDecimal accountBalance) {
         this.cardHolderName = cardHolderName;
         this.accountBalance = accountBalance;
     }
 
     public Card(String cardHolderName) {
+        this.accountBalance = BigDecimal.ZERO;
         this.cardHolderName = cardHolderName;
     }
 
@@ -23,27 +26,42 @@ public class Card {
         this.cardHolderName = cardHolderName;
     }
 
-    public int getAccountBalance() {
+    public BigDecimal getAccountBalance() {
         return accountBalance;
     }
 
-    public void setAccountBalance(int accountBalance) {
+    public void setAccountBalance(BigDecimal accountBalance) {
         this.accountBalance = accountBalance;
     }
 
-    public void balance() {
-        System.out.println(accountBalance);
+    public BigDecimal addBalance(BigDecimal money) {
+        return accountBalance.add(money);
     }
 
-    public void addBalance(int add) {
-        accountBalance += add;
+    public abstract BigDecimal withdrawBalance(BigDecimal withdraw) throws InsufficientFundsException;
+
+    public BigDecimal convertBalance(BigDecimal exchangeRate) {
+        return accountBalance.multiply(exchangeRate);
     }
 
-    public void withdrawBalance(int withdraw) {
-        accountBalance -= withdraw;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return Objects.equals(cardHolderName, card.cardHolderName) && Objects.equals(accountBalance, card.accountBalance);
     }
 
-    public void dollarBalance(double exchangeRate) {
-        System.out.println(accountBalance / exchangeRate);
+    @Override
+    public int hashCode() {
+        return Objects.hash(cardHolderName, accountBalance);
+    }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "cardHolderName='" + cardHolderName + '\'' +
+                ", accountBalance=" + accountBalance +
+                '}';
     }
 }
